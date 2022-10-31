@@ -19,6 +19,7 @@ app.get('/demo',(req,res)=>{
 
 app.use('/',router);
 
+app.use(express.static('public'));
 
 connection(DATABASE_URL);
 app.listen(port,()=>{

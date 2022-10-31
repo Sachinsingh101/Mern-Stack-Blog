@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import axios from 'axios'
-
+import {useNavigate} from 'react-router-dom'
 
 function Writeblog(){
     const [blog,setblog]=useState({
@@ -10,6 +10,7 @@ function Writeblog(){
       imgurl:"",
       thought:""
     })  
+    const navigate=useNavigate();
     function changeHandler1(e){
       setblog({
         ... blog,username:e.target.value
@@ -45,7 +46,7 @@ function Writeblog(){
       //   thought:blog.thought
       // }
       const formdata=new FormData();
-      formdata.append('imgurl',blog.imgurl);
+      formdata.append('NAME',blog.imgurl);
       formdata.append('username',blog.username);
       formdata.append('interest',blog.interest);
       formdata.append('designation',blog.designation);
@@ -53,17 +54,8 @@ function Writeblog(){
       
       // console.log(data);
       try{
-        let config={
-          method:"post",
-          url:"http://localhost:5000/postblog",
-          Headers:{
-            "content-type":"application/json",
-            "content-type":"mltipart/form-data"
-          },
-          data:formdata
-        
-        }
-        axios(config);
+
+        axios.post("http://localhost:5000/postblog",formdata);
         // setblog({
         //   username:"",
         //   interest:"Please select Your Interest",
@@ -75,6 +67,7 @@ function Writeblog(){
       }catch(err){
         console.log("error while posting blog",err);
       }
+      navigate('/home');
     }
     return(
         <>
@@ -82,7 +75,7 @@ function Writeblog(){
             <h1 className="text-center mb-5">Script your Blog</h1>
             <div className="row">
               <form onSubmit={submitHandler} encType="multipart/form-data">
-                <input className="form-control mt-4" type="text" placeholder="Your User Name" value={blog.username} onChange={changeHandler1} required></input>
+                <input className="form-control mt-4 text-danger" type="text" placeholder="Your User Name (username must be same while signup time)" value={blog.username} onChange={changeHandler1} required></input>
                 <select name="Purpose" className='form-select mt-4' value={blog.interest} onChange={changeHandler2}>
                    <option selected value="General">Please select Your Interest</option>
                    <option value="science">Science</option>
@@ -97,7 +90,7 @@ function Writeblog(){
                   <option value="Student">Student</option>
                   <option value="Learner">Other</option>
                 </select>
-                <input type="file" placeholder="Choose an image" className="form-control mt-3" onChange={changeHandler4}></input>
+                <input type="file" placeholder="Choose an image" className="form-control mt-3" name ="NAME" onChange={changeHandler4} required></input>
                 <textarea className="form-control mt-4" height="250px" placeholder="Tell your story .." value={blog.thought} onChange={changeHandler5}></textarea>
                 <input type="submit" value='Publish' className="btn btn-primary form-control mt-4 "></input>
               </form>

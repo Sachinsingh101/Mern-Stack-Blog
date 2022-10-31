@@ -59,4 +59,19 @@ const Getpost= async (req,res)=>{
         console.log("error while fetching posts",err);
     }
 }
-export {Signupcontroller,validateData ,Getpost}
+
+const removeHandler= async (req,res)=>{
+    try{
+        const user=await userModel.find({username:req.body.username});
+        const signupuser=user[1].username;
+        if(signupuser==req.body.username){
+           await postModel.findByIdAndDelete(req.body.paramid);
+           console.log("deleted");
+        }else{
+            console.log("error while deleting user");
+        }
+    }catch(err){
+        console.log(err);
+    }
+}
+export {Signupcontroller,validateData ,Getpost , removeHandler}

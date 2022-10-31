@@ -10,7 +10,7 @@ const postblogSchema=new mongoose.Schema({
     username:{type:String},
     interest:{type:String},
     designation:{type:String},
-    imgurl:{Type:String},
+    imgurl:{type:String},
     thought:{type:String}
 })
 

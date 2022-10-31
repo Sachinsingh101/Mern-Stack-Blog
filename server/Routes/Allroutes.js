@@ -1,52 +1,38 @@
 import express from "express";
 import { postModel } from "../connectDB/model.js";
 const router=express.Router();
-import {Signupcontroller,validateData , Getpost} from '../Controllers/Allcontroller.js'
-import multer from "multer";
-// import path from "path";
+import {Signupcontroller,validateData , Getpost , removeHandler} from '../Controllers/Allcontroller.js'
+import upload from './multerconfig.js'
 
-const upload=multer({
-        Storage:multer.diskStorage({
-        designation:function(req,file,cb){
-            cb(null,"public");
-        },
-        filename:function(req,file,cb){
-            cb(null,file.originalname="-"+Date.now()+ ",jpg");
-        }    
-    })
-}).single("imgurl")
-
-
-
-
-
-
- 
 router.all('/signup',Signupcontroller);
 router.post('/validate',validateData);
-router.post('/postblog',upload ,(req,res)=>{
-        console.log(req.body);
-        const username=req.body.username;
+router.get('/getposts',Getpost);
+
+
+router.post('/postblog',upload.single("NAME"),  (req,res)=>{
+    try{
+        
+        const imgurl=req.file.filename;
         const interest=req.body.interest;
-        const designation=req.body.designation;
-        // const imgurl=req.file.originalname; 
+        const designation=req.body.interest;
+        const username=req.body.username;
         const thought=req.body.thought;
         const postdata={
-            username,interest,designation,thought
+            imgurl,interest,designation,username,thought
         }
-        // console.log(imgurl);
-       
-    
-       try{
-         const post= new postModel(postdata);
+         const post=  new postModel(postdata);
          post.save();
          console.log(post);
-        //  res.send(imgurl);
+         res.send(imgurl);
         }catch(err){
         console.log("error while posting data",err);
        }
     }
 );
-router.get('/getposts',Getpost);
+
+router.all('/remove/',removeHandler);
+
+
+
 
 export default router;

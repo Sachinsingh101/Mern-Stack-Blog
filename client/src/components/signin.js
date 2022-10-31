@@ -25,7 +25,7 @@ function Signin(){
     let navigate=useNavigate();
     function submitHandler(e){
         e.preventDefault();
-        const validate={
+        const  validate={
             username:userdata.username,
             password:userdata.password
         }
